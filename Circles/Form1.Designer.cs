@@ -2,7 +2,7 @@
 {
     partial class Form1
     {
-        List<Circle> circles = new List<Circle>();
+        Storage<Circle> circles = new Storage<Circle>();
         /// <summary>
         ///  Required designer variable.
         /// </summary>
