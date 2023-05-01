@@ -32,7 +32,6 @@ using System.Threading.Tasks;
             Value = value;
             next = null;
             prev = null;
-            //Console.WriteLine("Конструктор ноды");
         }
     }
     public class Storage<K>
