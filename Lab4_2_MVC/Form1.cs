@@ -81,7 +81,6 @@ namespace Lab4_2_MVC
         }
         private void A_numericUpDown_Leave(object sender, EventArgs e)
         {
-            //MessageBox.Show(C_numericUpDown.Value.ToString());
             TempNumeric t = new TempNumeric();
             t.TemplateMethod(sender, m);
         }
@@ -97,100 +96,6 @@ namespace Lab4_2_MVC
         }
     }
 
-    public class Model
-    {
-        private int a;
-        private int b;
-        private int c;
-
-        public delegate void Changed(object sender, EventArgs e);
-        public Changed? observers;
-        public int A
-        {
-            get { return a; }
-            set { a = value; }
-        }
-        public int B
-        {
-            get { return b; }
-            set { b = value; }
-        }
-        public int C
-        {
-            get { return c; }
-            set { c = value; }
-        }
-        public void SetValueA(int value)
-        {
-            A = value;
-            if (A < 0)
-            {
-                A = 0;
-            }
-            if (A > 100)
-            {
-                A = 100;
-            }
-            if (A > B)
-            {
-                B = A;
-            }
-            if (B > C)
-            {
-                C = B;
-            }
-            observers.Invoke(null, EventArgs.Empty);
-        }
-        public void SetValueB(int value)
-        {
-            if (value >= A && value <= C)
-            {
-                B = value;
-            }
-            observers.Invoke(null, EventArgs.Empty);
-        }
-        public void SetValueC(int value)
-        {
-            C = value;
-            if (C < 0)
-            {
-                C = 0;
-            }
-            if (C > 100)
-            {
-                C = 100;
-            }
-            if (C < B)
-            {
-                B = C;
-            }
-            if (B < A)
-            {
-                A = B;
-            }
-            //MessageBox.Show("I was at C func");
-            observers.Invoke(null, EventArgs.Empty);
-        }
-        public void LoadFromFile()
-        {
-            FileStream fs = new FileStream("1.txt", FileMode.OpenOrCreate, FileAccess.Read);
-            BinaryReader bw = new BinaryReader(fs);
-            A = bw.ReadInt32();
-            B = bw.ReadInt32();
-            C = bw.ReadInt32();
-            fs.Close();
-            observers.Invoke(null, EventArgs.Empty);
-        }
-        public void WriteToFile()
-        {
-            FileStream fs = new FileStream("1.txt", FileMode.Create, FileAccess.Write);
-            BinaryWriter bw = new BinaryWriter(fs);
-            bw.Write(A);
-            bw.Write(B);
-            bw.Write(C);
-            fs.Close();
-        }
-    }
     abstract class Template
     {
         public virtual void DoSpecific(object sender, out string s, out int res)
@@ -204,17 +109,17 @@ namespace Lab4_2_MVC
             if (tag == "A")
             { 
                 if (result == -1) { result = m.A; }
-                m.SetValueA(result);
+                m.A = result;
             }
             else if (tag == "B")
             {
                 if (result == -1) { result = m.B; }
-                m.SetValueB(result);
+                m.B = result;
             }
             else if (tag == "C")
             {
                 if (result == -1) { result = m.C; }
-                m.SetValueC(result);
+                m.C = result;
             }
             m.observers.Invoke(null, EventArgs.Empty);
         }
@@ -223,7 +128,7 @@ namespace Lab4_2_MVC
     {
         public override void DoSpecific(object sender, out string s, out int res)
         {
-            TextBox tmp = (TextBox)sender;
+             TextBox tmp = (TextBox)sender;
              s = tmp.Tag.ToString();
              if (!Int32.TryParse(tmp.Text, out res) || tmp.Text == string.Empty)
              {
@@ -235,15 +140,15 @@ namespace Lab4_2_MVC
     {
         public override void DoSpecific(object sender, out string s, out int res)
         {
-            s = (sender as NumericUpDown).Tag.ToString();
-            if((sender as NumericUpDown).Text.ToString() == string.Empty)
+            NumericUpDown tmp = (NumericUpDown)sender;
+            s = tmp.Tag.ToString();
+            if (tmp.Text.ToString() == string.Empty)
             {
                 res = -1;
-                MessageBox.Show("I am here");
             }
             else
             {
-                res = Convert.ToInt32((sender as NumericUpDown).Value);
+                res = Convert.ToInt32(tmp.Value);
             }
         }
     }
@@ -251,44 +156,14 @@ namespace Lab4_2_MVC
     {
         public override void DoSpecific(object sender, out string s, out int res)
         {
-            s = (sender as TrackBar).Tag.ToString();
-            res = Convert.ToInt32((sender as TrackBar).Value);
+            TrackBar tmp = (TrackBar)sender;
+            s = tmp.Tag.ToString();
+            res = Convert.ToInt32(tmp.Value);
             if (res == decimal.Zero)
             {
                 res = -1;
             }
         }
     }
-    /* abstract class Template
-     {
-         public virtual void DoSpecific(Model m, int res) { }
-         public void TemplateMethod(object sender, Model m)
-         {
-             int result = 0;
-             if (sender is TextBox)
-             {
-                 Int32.TryParse((sender as TextBox).Text, out result);
-                 DoSpecific(m, result);
-             }
-             else if (sender is NumericUpDown)
-             {
-                 result = Convert.ToInt32((sender as NumericUpDown).Value);
-                 DoSpecific(m, result);
-             }
-             else if (sender is TrackBar)
-             {
-                 result = Convert.ToInt32((sender as TrackBar).Value);
-                 DoSpecific(m, result);
-             }
-         }
-     }
-     class TempA: Template
-     {
-         public override void DoSpecific(Model m, int res)
-         {
-             m.SetValueA(res);
-         }
-     }
- */
 }
    
