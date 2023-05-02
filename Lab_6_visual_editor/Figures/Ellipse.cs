@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab_6_visual_editor
+namespace Lab_6_visual_editor.Figures
 {
     internal class Ellipse : Figure
     {
@@ -20,8 +20,8 @@ namespace Lab_6_visual_editor
         public override char? WhatEdge(int margin)
         {
             if (X - Big_axis - margin < 0)
-                return  'l';
-            
+                return 'l';
+
             else if (X + Big_axis + margin > border_x)
                 return 'r';
 
@@ -40,12 +40,12 @@ namespace Lab_6_visual_editor
             {
                 pen.Color = Color.Red;
             }
-            pict.Graphics.FillEllipse(brush, (X - Big_axis), (Y - Small_axis), Big_axis * 2, Small_axis * 2);
-            pict.Graphics.DrawEllipse(pen, (X - Big_axis), (Y - Small_axis), Big_axis * 2, Small_axis * 2);
+            pict.Graphics.FillEllipse(brush, X - Big_axis, Y - Small_axis, Big_axis * 2, Small_axis * 2);
+            pict.Graphics.DrawEllipse(pen, X - Big_axis, Y - Small_axis, Big_axis * 2, Small_axis * 2);
         }
         public override bool CheckSelection(int x, int y)
         {
-            if (((x - X) * (x - X) + (y - Y) * (y - Y)) <= Big_axis * Small_axis)
+            if ((x - X) * (x - X) + (y - Y) * (y - Y) <= Big_axis * Small_axis)
             {
                 // Select();
                 return true;
@@ -81,7 +81,7 @@ namespace Lab_6_visual_editor
                 X = border_x - Big_axis - margin;
 
             else if (edge == 'b')
-                 Y = border_y - Small_axis - margin;
+                Y = border_y - Small_axis - margin;
         }
         public override void Move(char key)
         {

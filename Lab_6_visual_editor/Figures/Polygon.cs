@@ -9,16 +9,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
 
-namespace Lab_6_visual_editor
+namespace Lab_6_visual_editor.Figures
 {
-    internal class Polygon: Figure
+    internal class Polygon : Figure
     {
         PointF[] vertices;
         protected float Radius = 50.0f;
         protected float angle;
         // GraphicsPath path;
         public int VertCount { get; protected set; }
-        public Polygon (Color color, bool select, float x, float y, int num_of_vertices) :base(color, select, x, y)
+        public Polygon(Color color, bool select, float x, float y, int num_of_vertices) : base(color, select, x, y)
         {
             VertCount = num_of_vertices;
             angle = 360.0f / VertCount;
@@ -49,8 +49,8 @@ namespace Lab_6_visual_editor
             {
                 pen.Color = Color.Red;
             }
-             pict.Graphics.FillPolygon(brush, vertices);
-             pict.Graphics.DrawPolygon(pen, vertices);
+            pict.Graphics.FillPolygon(brush, vertices);
+            pict.Graphics.DrawPolygon(pen, vertices);
         }
         public override bool CheckSelection(int x, int y)
         {
@@ -60,7 +60,7 @@ namespace Lab_6_visual_editor
             {
                 float res1 = vertices[i].X + (y - vertices[i].Y) / (vertices[j].Y - vertices[i].Y) * (vertices[j].X - vertices[i].X);
                 if ((vertices[i].Y < y && vertices[j].Y >= y || vertices[j].Y < y && vertices[i].Y >= y) &&
-                     (res1 < x))
+                     res1 < x)
                     result = !result;
                 j = i;
             }
@@ -81,7 +81,7 @@ namespace Lab_6_visual_editor
         }
         public override void ScaleChange(char key)
         {
-            if (key ==  '-')
+            if (key == '-')
             {
                 Radius -= RadiusMargin;
                 return;
