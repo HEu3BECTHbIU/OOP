@@ -1,19 +1,16 @@
-using System.Collections.Specialized;
-using System.ComponentModel.Design;
-using System.Data.SqlTypes;
+using Lab_6_visual_editor.Storage;
 using System.Windows.Forms;
-using System.Windows.Input;
 
 namespace Lab_6_visual_editor
 {
     public partial class Form1 : Form
     {
         internal Storage<Figure> figures;
+        //internal 
         internal MyFactory factory;
         public Form1()
         {
             InitializeComponent();
-
             figures = new Storage<Figure>();
             colordDialog1 = new ColorDialog();
             factory = new MyFactory();
@@ -40,11 +37,12 @@ namespace Lab_6_visual_editor
         private void MouseClickWithIntersection(object sender, MouseEventArgs e)
         {
             bool flag = false;
-            for (Node<Figure>? i = figures.Head; figures.Exists(i); i = i.Next)
+            CIterator<Figure> i = figures.CreateIterator();
+            for(i.First(); !i.IsEol(); i.Next())
             {
-                if (i.Value.CheckSelection(e.X, e.Y))
+                if(i.GetCurrent().CheckSelection(e.X, e.Y))
                 {
-                    i.Value.Select();
+                    i.GetCurrent().Select();
                     flag = true;
                 }
             }
@@ -57,11 +55,12 @@ namespace Lab_6_visual_editor
         private void MouseClickNoIntersection(object sender, MouseEventArgs e)
         {
             bool flag = false;
-            for (Node<Figure>? i = figures.Head; figures.Exists(i); i = i.Next)
+            CIterator<Figure> i = figures.CreateIterator();
+            for (i.First(); !i.IsEol(); i.Next())
             {
-                if (i.Value.CheckSelection(e.X, e.Y))
+                if (i.GetCurrent().CheckSelection(e.X, e.Y))
                 {
-                    i.Value.Select();
+                    i.GetCurrent().Select();
                     flag = true;
                     break;
                 }
@@ -77,11 +76,12 @@ namespace Lab_6_visual_editor
         {
             if (Convert.ToInt32(e.KeyChar) == 8)
             {
-                for (Node<Figure>? i = figures.Head; figures.Exists(i); i = i.Next)
+                CIterator<Figure> i = figures.CreateIterator();
+                for (i.First(); !i.IsEol(); i.Next())
                 {
-                    if (i.Value.IsSelected)
+                    if (i.GetCurrent().IsSelected)
                     {
-                        figures.Remove(i.Value);
+                        figures.Remove(i.GetCurrent());
 
                     }
                 }
@@ -96,31 +96,37 @@ namespace Lab_6_visual_editor
            char com = e.KeyChar;
            if (com == 'w' || com == 's' || com == 'a' || com == 'd')
            {
-                for (Node<Figure>? i = figures.Head; figures.Exists(i); i = i.Next)
+                CIterator<Figure> i = figures.CreateIterator();
+                for (i.First(); !i.IsEol(); i.Next())
                 {
-                    if (i.Value.IsSelected)
+                    if (i.GetCurrent().IsSelected)
                     {
-                        i.Value.Move(com);
+                        i.GetCurrent().Move(com);
+
                     }
                 }
-            }
+           }
            else if (com == '+' || com == '-')
             {
-                for (Node<Figure>? i = figures.Head; figures.Exists(i); i = i.Next)
+                CIterator<Figure> i = figures.CreateIterator();
+                for (i.First(); !i.IsEol(); i.Next())
                 {
-                    if (i.Value.IsSelected)
+                    if (i.GetCurrent().IsSelected)
                     {
-                        i.Value.ScaleChange(com);
+                        i.GetCurrent().ScaleChange(com);
+
                     }
                 }
             }
             if (Convert.ToInt32(e.KeyChar) == 8)
             {
-                for (Node<Figure>? i = figures.Head; figures.Exists(i); i = i.Next)
+                CIterator<Figure> i = figures.CreateIterator();
+                for (i.First(); !i.IsEol(); i.Next())
                 {
-                    if (i.Value.IsSelected)
+                    if (i.GetCurrent().IsSelected)
                     {
-                        figures.Remove(i.Value);
+                        figures.Remove(i.GetCurrent());
+
                     }
                 }
                 if (figures.Count != 0)
@@ -140,9 +146,10 @@ namespace Lab_6_visual_editor
                 }
                 else
                 {
-                    for (Node<Figure>? i = figures.Head; figures.Exists(i); i = i.Next)
+                    CIterator<Figure> i = figures.CreateIterator();
+                    for (i.First(); !i.IsEol(); i.Next())
                     {
-                        i.Value.Deselect();
+                        i.GetCurrent().Deselect();
                     }
                 }
                 if (IntersectionCheck.Checked)
@@ -159,12 +166,12 @@ namespace Lab_6_visual_editor
 
         private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
         {
-            for (Node<Figure>? i = figures.Head; figures.Exists(i); i = i.Next)
+            CIterator<Figure> i = figures.CreateIterator();
+            for (i.First(); !i.IsEol(); i.Next())
             {
-                i.Value.Draw(e);
+                i.GetCurrent().Draw(e);
             }
         }
-
         private void toolStripComboBox1_TextChanged(object sender, EventArgs e)
         {
             splitContainer1.Select();
@@ -178,17 +185,21 @@ namespace Lab_6_visual_editor
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
         {
             colordDialog1.FullOpen = false;
+            Color oldColor = colordDialog1.Color;
             if (colordDialog1.ShowDialog() == DialogResult.OK)
             {
-                colordDialog1.Color = colordDialog1.Color;
+               // colordDialog1.Color = colordDialog1.Color;
             }
-            for (Node<Figure>? i = figures.Head; figures.Exists(i); i = i.Next)
+            CIterator<Figure> i = figures.CreateIterator();
+            for (i.First(); !i.IsEol(); i.Next())
             {
-                if (i.Value.IsSelected)
+                if (i.GetCurrent().IsSelected)
                 {
-                    i.Value.ColorChange(colordDialog1.Color);
+                    i.GetCurrent().ColorChange(colordDialog1.Color);
+
                 }
             }
+            colordDialog1.Color = oldColor;
             splitContainer1.Panel1.Refresh();
         }
     }
