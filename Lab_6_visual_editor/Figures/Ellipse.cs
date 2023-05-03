@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lab_6_visual_editor.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,29 +9,41 @@ namespace Lab_6_visual_editor.Figures
 {
     internal class Ellipse : Figure
     {
-        public int Big_axis { get; set; }
-        public int Small_axis { get; set; }
+        public float Big_axis { get; set; }
+        public float Small_axis { get; set; }
         public Ellipse(Color color, bool select, float x, float y, int big, int small) : base(color, select, x, y)
         {
             Big_axis = big;
             Small_axis = small;
-            Correct(0);
-            Correct(0);
+            char edge = WhatEdge();
+            Correct(edge);
+            edge = WhatEdge();
+            Correct(edge);
         }
-        public override char? WhatEdge(int margin)
+        public override bool IsOnEdge()
         {
-            if (X - Big_axis - margin < 0)
+            char edge = WhatEdge();
+            if (edge != default)
+            {
+                return true;
+            }
+            return false;
+        }
+        public override char WhatEdge()
+        {
+            if (X - Big_axis < 0)
                 return 'l';
 
-            else if (X + Big_axis + margin > border_x)
+            else if (X + Big_axis > border_x)
                 return 'r';
 
-            else if (Y - Small_axis - RadiusMargin < 0)
+            else if (Y - Small_axis < 0)
                 return 'u';
 
-            else if (Y + Small_axis + margin > border_y)
+            else if (Y + Small_axis > border_y)
                 return 'b';
-            return null;
+
+            return default;
         }
         public override void Draw(PaintEventArgs pict)
         {
@@ -47,53 +60,38 @@ namespace Lab_6_visual_editor.Figures
         {
             if ((x - X) * (x - X) + (y - Y) * (y - Y) <= Big_axis * Small_axis)
             {
-                // Select();
                 return true;
             }
             return false;
         }
-        public override void ScaleChange(char key)
+        
+        // коррекция положения в конструкторе
+        public override void Correct(char edge)
         {
-            if (key == '-')
-            {
-                Big_axis -= RadiusMargin;
-                Small_axis -= RadiusMargin;
-                return;
-            }
-            else if (key == '+')
-            {
-                Big_axis += RadiusMargin;
-                Correct(RadiusMargin);
-                Small_axis += RadiusMargin;
-                Correct(RadiusMargin);
-            }
-        }
-        public override void Correct(int margin)
-        {
-            char? edge = WhatEdge(margin);
+            
             if (edge == 'l')
-                X = Big_axis + margin;
+                 X = Big_axis;
 
             else if (edge == 'u')
-                Y = Small_axis + margin;
+                Y = Small_axis;
 
             else if (edge == 'r')
-                X = border_x - Big_axis - margin;
+                 X = border_x - Big_axis;
 
             else if (edge == 'b')
-                Y = border_y - Small_axis - margin;
+                  Y = border_y - Small_axis;
         }
-        public override void Move(char key)
+
+        public override void Move(int x, int y)
         {
-            if (key == 'w')
-                Y -= MoveMargin;
-            else if (key == 's')
-                Y += MoveMargin;
-            else if (key == 'a')
-                X -= MoveMargin;
-            else if (key == 'd')
-                X += MoveMargin;
-            Correct(MoveMargin / 2);
+            X += x;
+            Y += y;
+        }
+
+        public override void ScaleChange(float scale)
+        {
+            Small_axis *= scale;
+            Big_axis *= scale;
         }
     }
 }

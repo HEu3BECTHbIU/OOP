@@ -11,19 +11,20 @@ using System.Windows.Forms.VisualStyles;
 
 namespace Lab_6_visual_editor.Figures
 {
-    internal class Polygon : Figure
+    public class Polygon : Figure
     {
         PointF[] vertices;
         protected float Radius = 50.0f;
         protected float angle;
-        // GraphicsPath path;
         public int VertCount { get; protected set; }
         public Polygon(Color color, bool select, float x, float y, int num_of_vertices) : base(color, select, x, y)
         {
             VertCount = num_of_vertices;
             angle = 360.0f / VertCount;
-            Correct(0);
-            Correct(0);
+            char edge = WhatEdge();
+            Correct(edge);
+            edge = WhatEdge();
+            Correct(edge);
             vertices = new PointF[num_of_vertices];
             VertCount = num_of_vertices;
 
@@ -66,72 +67,62 @@ namespace Lab_6_visual_editor.Figures
             }
             return result;
         }
-        public override void Move(char key)
+        public override void Correct(char edge)
         {
-            if (key == 'w')
-                Y -= MoveMargin;
-            else if (key == 's')
-                Y += MoveMargin;
-            else if (key == 'a')
-                X -= MoveMargin;
-            else if (key == 'd')
-                X += MoveMargin;
-            Correct(MoveMargin / 2);
-            Recalc(X, Y);
-        }
-        public override void ScaleChange(char key)
-        {
-            if (key == '-')
-            {
-                Radius -= RadiusMargin;
-                return;
-            }
-            else if (key == '+')
-            {
-                Radius += RadiusMargin;
-                Correct(RadiusMargin);
-            }
-            Recalc(X, Y);
-        }
-        public override void Correct(int margin)
-        {
-            char? edge = WhatEdge(margin);
             if (edge == 'l')
+                X = Radius;
+
+            else if (edge == 'u')
+                Y = Radius;
+
+            else if (edge == 'r')
+                X = border_x - Radius;
+
+            else if (edge == 'b')
+                Y = border_y - Radius;
+    }
+    public override char WhatEdge()
+        {
+            if (X - Radius < 0)
+                return 'l';
+
+            if (X + Radius > border_x)
+                return 'r';
+
+             if (Y - Radius < 0)
+                return 'u';
+
+             if (Y + Radius > border_y)
+                return 'b';
+
+            return default;
+        }
+
+        public override void Move(int x, int y)
+        {
+            X += x;
+            Y += y;
+            for (int i = 0; i < VertCount; i++)
             {
-                X = Radius + margin;
-            }
-            if (edge == 'u')
-            {
-                Y = Radius + margin;
-            }
-            if (edge == 'r')
-            {
-                X = border_x - Radius - margin;
-            }
-            if (edge == 'b')
-            {
-                Y = border_y - Radius - margin;
+                vertices[i].X += x;
+                vertices[i].Y += y;
             }
         }
-        public override char? WhatEdge(int margin)
+
+        public override bool IsOnEdge()
         {
-            if (X - Radius - margin < 0)
+            char edge = WhatEdge();
+            if (edge != default)
             {
-                return 'l';
+                return true;
             }
-            else if (X + Radius + margin > border_x)
-            {
-                return 'r';
-            }
-            else if (Y - Radius - RadiusMargin < 0)
-            {
-                return 'u';
-            }
-            else if (Y + Radius + margin > border_y)
-            {
-                return 'b';
-            }
-            return null;
+            return false;
+        }
+
+        public override void ScaleChange(float scale)
+        {
+            Radius *= scale;
+            Recalc(X, Y);
         }
     }
 }
