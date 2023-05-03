@@ -42,6 +42,8 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             toolStripMenuItem1 = new ToolStripMenuItem();
             toolStripSeparator3 = new ToolStripSeparator();
+            сгруппироватьToolStripMenuItem = new ToolStripMenuItem();
+            разгруппироватьToolStripMenuItem = new ToolStripMenuItem();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.SuspendLayout();
@@ -137,21 +139,35 @@
             // contextMenuStrip1
             // 
             contextMenuStrip1.ImageScalingSize = new Size(20, 20);
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripSeparator3 });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripSeparator3, сгруппироватьToolStripMenuItem, разгруппироватьToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 34);
+            contextMenuStrip1.Size = new Size(211, 110);
             // 
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(180, 24);
+            toolStripMenuItem1.Size = new Size(210, 24);
             toolStripMenuItem1.Text = "изменить цвет";
             toolStripMenuItem1.Click += toolStripMenuItem1_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(177, 6);
+            toolStripSeparator3.Size = new Size(207, 6);
+            // 
+            // сгруппироватьToolStripMenuItem
+            // 
+            сгруппироватьToolStripMenuItem.Name = "сгруппироватьToolStripMenuItem";
+            сгруппироватьToolStripMenuItem.Size = new Size(210, 24);
+            сгруппироватьToolStripMenuItem.Text = "сгруппировать";
+            сгруппироватьToolStripMenuItem.Click += сгруппироватьToolStripMenuItem_Click;
+            // 
+            // разгруппироватьToolStripMenuItem
+            // 
+            разгруппироватьToolStripMenuItem.Name = "разгруппироватьToolStripMenuItem";
+            разгруппироватьToolStripMenuItem.Size = new Size(210, 24);
+            разгруппироватьToolStripMenuItem.Text = "разгруппировать";
+            разгруппироватьToolStripMenuItem.Click += разгруппироватьToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -160,6 +176,8 @@
             ClientSize = new Size(800, 450);
             Controls.Add(splitContainer1);
             Controls.Add(toolStrip1);
+            KeyPreview = true;
+            MinimumSize = new Size(700, 400);
             Name = "Form1";
             Text = "Form1";
             KeyPress += Form1_KeyPress;
@@ -188,5 +206,7 @@
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem toolStripMenuItem1;
         private ToolStripSeparator toolStripSeparator3;
+        private ToolStripMenuItem сгруппироватьToolStripMenuItem;
+        private ToolStripMenuItem разгруппироватьToolStripMenuItem;
     }
 }
