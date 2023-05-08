@@ -31,6 +31,11 @@
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             toolStrip1 = new ToolStrip();
+            toolStripDropDownButton1 = new ToolStripDropDownButton();
+            открытьToolStripMenuItem = new ToolStripMenuItem();
+            сохранитьToolStripMenuItem = new ToolStripMenuItem();
+            закрытьToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator4 = new ToolStripSeparator();
             toolStripComboBox1 = new ToolStripComboBox();
             toolStripSeparator1 = new ToolStripSeparator();
             toolStripButton1 = new ToolStripButton();
@@ -53,13 +58,49 @@
             // toolStrip1
             // 
             toolStrip1.ImageScalingSize = new Size(20, 20);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripComboBox1, toolStripSeparator1, toolStripButton1, toolStripSeparator2, toolStripSplitButton1 });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripDropDownButton1, toolStripSeparator4, toolStripComboBox1, toolStripSeparator1, toolStripButton1, toolStripSeparator2, toolStripSplitButton1 });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(800, 28);
             toolStrip1.TabIndex = 0;
             toolStrip1.Text = "toolStrip1";
             toolStrip1.ItemClicked += toolStrip1_ItemClicked;
+            // 
+            // toolStripDropDownButton1
+            // 
+            toolStripDropDownButton1.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            toolStripDropDownButton1.DropDownItems.AddRange(new ToolStripItem[] { открытьToolStripMenuItem, сохранитьToolStripMenuItem, закрытьToolStripMenuItem });
+            toolStripDropDownButton1.Image = (Image)resources.GetObject("toolStripDropDownButton1.Image");
+            toolStripDropDownButton1.ImageTransparentColor = Color.Magenta;
+            toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            toolStripDropDownButton1.Size = new Size(59, 25);
+            toolStripDropDownButton1.Text = "Файл";
+            // 
+            // открытьToolStripMenuItem
+            // 
+            открытьToolStripMenuItem.Name = "открытьToolStripMenuItem";
+            открытьToolStripMenuItem.Size = new Size(224, 26);
+            открытьToolStripMenuItem.Text = "Открыть";
+            открытьToolStripMenuItem.Click += открытьToolStripMenuItem_Click;
+            // 
+            // сохранитьToolStripMenuItem
+            // 
+            сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
+            сохранитьToolStripMenuItem.Size = new Size(224, 26);
+            сохранитьToolStripMenuItem.Text = "Сохранить";
+            сохранитьToolStripMenuItem.Click += сохранитьToolStripMenuItem_Click;
+            // 
+            // закрытьToolStripMenuItem
+            // 
+            закрытьToolStripMenuItem.Name = "закрытьToolStripMenuItem";
+            закрытьToolStripMenuItem.Size = new Size(224, 26);
+            закрытьToolStripMenuItem.Text = "Очистить";
+            закрытьToolStripMenuItem.Click += закрытьToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator4
+            // 
+            toolStripSeparator4.Name = "toolStripSeparator4";
+            toolStripSeparator4.Size = new Size(6, 28);
             // 
             // toolStripComboBox1
             // 
@@ -141,31 +182,31 @@
             contextMenuStrip1.ImageScalingSize = new Size(20, 20);
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripSeparator3, сгруппироватьToolStripMenuItem, разгруппироватьToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(211, 110);
+            contextMenuStrip1.Size = new Size(200, 82);
             // 
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(210, 24);
+            toolStripMenuItem1.Size = new Size(199, 24);
             toolStripMenuItem1.Text = "изменить цвет";
             toolStripMenuItem1.Click += toolStripMenuItem1_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(207, 6);
+            toolStripSeparator3.Size = new Size(196, 6);
             // 
             // сгруппироватьToolStripMenuItem
             // 
             сгруппироватьToolStripMenuItem.Name = "сгруппироватьToolStripMenuItem";
-            сгруппироватьToolStripMenuItem.Size = new Size(210, 24);
+            сгруппироватьToolStripMenuItem.Size = new Size(199, 24);
             сгруппироватьToolStripMenuItem.Text = "сгруппировать";
             сгруппироватьToolStripMenuItem.Click += сгруппироватьToolStripMenuItem_Click;
             // 
             // разгруппироватьToolStripMenuItem
             // 
             разгруппироватьToolStripMenuItem.Name = "разгруппироватьToolStripMenuItem";
-            разгруппироватьToolStripMenuItem.Size = new Size(210, 24);
+            разгруппироватьToolStripMenuItem.Size = new Size(199, 24);
             разгруппироватьToolStripMenuItem.Text = "разгруппировать";
             разгруппироватьToolStripMenuItem.Click += разгруппироватьToolStripMenuItem_Click;
             // 
@@ -194,7 +235,6 @@
         #endregion
 
         private ToolStrip toolStrip1;
-        private ToolStripComboBox toolStripComboBox1;
         private ColorDialog colordDialog1;
         private ToolStripButton toolStripButton1;
         private ToolStripSplitButton toolStripSplitButton1;
@@ -208,5 +248,11 @@
         private ToolStripSeparator toolStripSeparator3;
         private ToolStripMenuItem сгруппироватьToolStripMenuItem;
         private ToolStripMenuItem разгруппироватьToolStripMenuItem;
+        private ToolStripDropDownButton toolStripDropDownButton1;
+        private ToolStripSeparator toolStripSeparator4;
+        private ToolStripComboBox toolStripComboBox1;
+        private ToolStripMenuItem открытьToolStripMenuItem;
+        private ToolStripMenuItem сохранитьToolStripMenuItem;
+        private ToolStripMenuItem закрытьToolStripMenuItem;
     }
 }

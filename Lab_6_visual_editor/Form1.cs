@@ -1,14 +1,17 @@
 using Lab_6_visual_editor.Commands;
 using Lab_6_visual_editor.Figures;
 using Lab_6_visual_editor.Storage;
+using Newtonsoft.Json;
 using System.Configuration;
+using System.IO;
 using System.Windows.Forms;
+// using System.Xml;
 
 namespace Lab_6_visual_editor
 {
     public partial class Form1 : Form
     {
-        internal Storage<Element> figures;
+        internal ShapeStorage figures;
         //internal 
         internal MyFactory factory;
 
@@ -16,7 +19,7 @@ namespace Lab_6_visual_editor
         public Form1()
         {
             InitializeComponent();
-            figures = new Storage<Element>();
+            figures = new ShapeStorage();
             commands = new Dictionary<char, Command>();
             commands['a'] = new MoveCommand(-10, 0);
             commands['d'] = new MoveCommand(10, 0);
@@ -145,7 +148,7 @@ namespace Lab_6_visual_editor
                 }
                 if (figures.Count != 0)
                 {
-                    figures.Tail.Value.Select();
+                    figures.Head.Value.Select();
                 }
             }
             splitContainer1.Panel1.Refresh();
@@ -237,7 +240,10 @@ namespace Lab_6_visual_editor
                     figures.Remove(i.GetCurrent());
                 }
             }
-            figures.PushBack(new_group);
+            if (new_group.Count() > 0)
+            {
+                figures.PushBack(new_group);
+            }
             splitContainer1.Panel1.Refresh();
         }
 
@@ -262,13 +268,59 @@ namespace Lab_6_visual_editor
             //    {
             //        figures.Remove(i.GetCurrent());
             //    }
-           // }
+            // }
 
             i = group_elements.CreateIterator();
             for (i.First(); !i.IsEol(); i.Next())
             {
                 figures.PushBack(i.GetCurrent());
             }
+            splitContainer1.Panel1.Refresh();
+        }
+
+        private async void ñîõðàíèòüToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (StreamWriter fs = new StreamWriter("info.txt"))
+            {
+                await fs.WriteLineAsync(figures.Count.ToString());
+
+                CIterator<Element> i = figures.CreateIterator();
+                for (i.First(); !i.IsEol(); i.Next())
+                {
+                    i.GetCurrent().Save(fs);
+                }
+            }
+            /*
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+                Formatting = Formatting.Indented,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+
+            };
+            using (StreamWriter fs = new StreamWriter("user.json"))
+            {
+                //Figure tom = new Person("Tom", 37);
+                string json = JsonConvert.SerializeObject(figures, settings);
+                await fs.WriteLineAsync(json);
+
+            }
+            */
+        }
+
+        private void îòêðûòüToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string path = "info.txt";
+            using (StreamReader reader = new StreamReader(path))
+            {
+                figures.LoadFigures(reader, factory);
+            }
+            splitContainer1.Panel1.Refresh();
+        }
+
+        private void çàêðûòüToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            figures.Clear();
             splitContainer1.Panel1.Refresh();
         }
     }
