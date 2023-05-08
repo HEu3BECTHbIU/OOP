@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Lab_6_visual_editor.Figures;
 
 namespace Lab_6_visual_editor
 {
-    internal abstract class FigureFactory
+    public abstract class FigureFactory
     {
         public abstract Figure CreateFigure(string name, Color color, bool select, int x, int y, int big = 40, int small = 25);
+        public abstract Element? CreateFigure(string name);
        // public abstract Figure CreatePolygon(string name, Color color, bool select, int x, int y, int num_of_vertices);
     }
 
@@ -16,7 +20,7 @@ namespace Lab_6_visual_editor
     {
         public override Figure CreateFigure(string name, Color color, bool select, int x, int y, int big = 40, int small = 25)
         {
-            Figure fig;
+            Figure? fig = null;
             if (name == "Ellipse")
             {
                 fig = new Ellipse(color, select, x, y, big, small);
@@ -44,24 +48,22 @@ namespace Lab_6_visual_editor
             return fig;
         }
 
-       /* public override Figure CreatePolygon(string name, Color color, bool select, int x, int y, int num_of_vertices)
+        public override Element? CreateFigure(string name)
         {
-            Figure fig = null;
-            if (name == "Square")
+            Element? fig = null;
+            if (name == "Ellipse")
             {
-                fig = new Polygon(color, select, x, y, 4);
+                fig = new Ellipse(default, default, default, default, default, default);
             }
-            else if (name == "Pentagon")
+            else if (name == "Polygon")
             {
-                fig = new Polygon(color, select, x, y, 5);
+                fig = new Polygon(default, default, default, default, default);
             }
-            else if (name == "Triangle")
+            else if (name == "Group")
             {
-                fig = new Polygon(color, select, x, y, 3);
+                fig = new CGroup(default);
             }
             return fig;
         }
-       */
-
     }
 }

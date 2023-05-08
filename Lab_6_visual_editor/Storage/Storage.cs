@@ -1,5 +1,6 @@
 ﻿namespace Lab_6_visual_editor.Storage
 {
+    using Lab_6_visual_editor.Figures;
     using System;
 
     public class Node<T>
@@ -31,15 +32,17 @@
         }
         public class Storage<K>
         {
-            public Node<K>? Head { get; private set; }
-            public Node<K>? Tail { get; private set; }
-            public int Count { get; private set; }
-            public Storage()
+            public Node<K>? Head { get; protected set; }
+            public Node<K>? Tail { get; set; }
+            public int Count { get;  protected set; }
+
+        public Storage()
             {
                 Head = null;
                 Tail = null;
                 Count = 0;
             }
+        
             public void PushBack(K value)
             {
                 if (Head == null)
@@ -147,9 +150,40 @@
                 }
                 return false;
             }
-            public CIterator<K> CreateIterator()
-            {
-                return new StorageIterator<K>(this);
-            }
+        public CIterator<K> CreateIterator()
+        {
+            return new StorageIterator<K>(this);
         }
+        public void Clear()
+        {
+            Head = null;
+            Tail = null;
+            Count = 0;
+        }
+    }
+    public class ShapeStorage: Storage<Element>
+    {
+        public void LoadFigures(StreamReader reader, FigureFactory factory)
+        {
+            Element? curr = null;
+            string? current_figure;
+            int counter = 0;
+
+           // using (StreamReader reader = new StreamReader(path))
+           // {
+                counter = Convert.ToInt32(reader.ReadLine());
+
+                for (int i = 0; i < counter; i++)
+                {
+                    current_figure = reader.ReadLine();
+                    curr = factory.CreateFigure(current_figure);
+                    if (curr != null)
+                    {
+                        curr.Load(reader, factory);
+                        PushBack(curr);
+                    }
+                }
+            //}
+        }
+    }
 }

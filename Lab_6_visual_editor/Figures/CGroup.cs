@@ -7,12 +7,12 @@ namespace Lab_6_visual_editor.Figures
 {
     public class CGroup : Element
     {
-        Storage<Element>? group;
+        protected ShapeStorage? group;
 
         public CGroup(bool selection)
         {
             IsSelected = selection;
-            group = new Storage<Element>();
+            group = new ShapeStorage();
         }
         public void AddFigure(Element element) 
         { 
@@ -28,6 +28,10 @@ namespace Lab_6_visual_editor.Figures
                     group_members.PushBack(i.GetCurrent());
                 }
             }
+        }
+        public int Count()
+        {
+            return group.Count;
         }
         public override void Select()
         {
@@ -121,25 +125,47 @@ namespace Lab_6_visual_editor.Figures
                 }
             }
         }
-        /*
-        public override void Move(char key)
+
+        public override void Load(StreamReader reader, FigureFactory factory)
         {
-            if (group.Count != 0)
-            {
-                CIterator<Element> i = group.CreateIterator();
-                for (i.First(); !i.IsEol(); i.Next())
-                {
-                    i.GetCurrent().Move(key);
-                    char edge = WhatEdge();
-                    if (edge != default)
-                    {
-                       // i.GetCurrent().Correct(edge);
-                        break;
-                    }
-                }
-            }
+           // string[] names = reader.ReadLine().Split(" ");
+            IsSelected = Convert.ToBoolean(reader.ReadLine());
+            group.LoadFigures(reader, factory);
+            
         }
-        */
+
+        public override void Save(StreamWriter writer)
+        {
+            writer.WriteLine("Group");
+            string s = IsSelected + "\n" + group.Count;
+            writer.WriteLine(s);
+
+            CIterator<Element> i = group.CreateIterator();
+            for (i.First(); !i.IsEol(); i.Next())
+            {
+                i.GetCurrent().Save(writer);
+            }
+
+        }
+        /*
+public override void Move(char key)
+{
+if (group.Count != 0)
+{
+CIterator<Element> i = group.CreateIterator();
+for (i.First(); !i.IsEol(); i.Next())
+{
+  i.GetCurrent().Move(key);
+  char edge = WhatEdge();
+  if (edge != default)
+  {
+     // i.GetCurrent().Correct(edge);
+      break;
+  }
+}
+}
+}
+*/
         /*
         public override void ScaleChange(char key)
         {

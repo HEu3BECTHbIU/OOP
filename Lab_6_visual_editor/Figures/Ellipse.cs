@@ -1,16 +1,18 @@
 ﻿using Lab_6_visual_editor.Commands;
+using Lab_6_visual_editor.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Lab_6_visual_editor.Figures
 {
-    internal class Ellipse : Figure
+    public class Ellipse : Figure
     {
-        public float Big_axis { get; set; }
-        public float Small_axis { get; set; }
+        public float Big_axis { get; protected set; }
+        public float Small_axis { get; protected set; }
         public Ellipse(Color color, bool select, float x, float y, int big, int small) : base(color, select, x, y)
         {
             Big_axis = big;
@@ -92,6 +94,26 @@ namespace Lab_6_visual_editor.Figures
         {
             Small_axis *= scale;
             Big_axis *= scale;
+        }
+
+        public override void Save(StreamWriter reader)
+        {
+            reader.WriteLine("Ellipse");
+            string s = Fcolor.ToArgb() + " " + X + " " + Y + " " + IsSelected + " " + Big_axis + " " + Small_axis;
+            //reader.Write(Fcolor.Name, " ", X, " ", Y, " ", IsSelected, " ", Big_axis, " ", Small_axis, "\n");
+            reader.WriteLine(s);
+        }
+
+        public override async void Load(StreamReader reader, FigureFactory factory)
+        {
+            string[] names = (await reader.ReadLineAsync()).Split(" ");
+            Fcolor = Color.FromArgb(Convert.ToInt32(names[0]));
+            X = Convert.ToInt32(names[1]);
+            Y = Convert.ToInt32(names[2]);
+            IsSelected = Convert.ToBoolean(names[3]);
+            Big_axis = Convert.ToInt32(names[4]);
+            Small_axis = Convert.ToInt32(names[5]);
+            //this = await JsonSerializer.DeserializeAsync<Ellipse>(reader);
         }
     }
 }

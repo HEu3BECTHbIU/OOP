@@ -1,10 +1,11 @@
 ﻿using Lab_6_visual_editor.Figures;
+using Lab_6_visual_editor.Interfaces;
 
 namespace Lab_6_visual_editor
 {
     public abstract class Figure: Element
     {
-        public Color Fcolor { get; set; }
+        public Color Fcolor { get; protected set; }
        // public bool IsSelected { get; protected set; }
         public float X { get; protected set; }
         public float Y { get; protected set; }
@@ -32,6 +33,9 @@ namespace Lab_6_visual_editor
         {
             Fcolor = color;
         }
+
+        // public abstract void Save();
+        // public abstract void Load();
     }
 }
 

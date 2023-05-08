@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lab_6_visual_editor.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Lab_6_visual_editor.Figures
 {
-    public abstract class Element
+    public abstract class Element: ISavable
     {
         protected readonly static int RadiusMargin = 2;
 
@@ -28,6 +29,8 @@ namespace Lab_6_visual_editor.Figures
         abstract public void ScaleChange(float scale); // изменение размера
         abstract public void Draw(PaintEventArgs pict); // отрисовка
         public abstract bool IsOnEdge(); // проверка, находится ли на границе
+        public abstract void Save(StreamWriter reader);
+        public abstract void Load(StreamReader reader, FigureFactory factory);
 
         // abstract public char WhatEdge(); // на какой границе 
         // abstract public void Correct(char label); // коррекция положения

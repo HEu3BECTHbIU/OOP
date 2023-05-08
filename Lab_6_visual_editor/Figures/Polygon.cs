@@ -13,8 +13,8 @@ namespace Lab_6_visual_editor.Figures
 {
     public class Polygon : Figure
     {
-        PointF[] vertices;
-        protected float Radius = 50.0f;
+        protected PointF[] vertices;
+        public float Radius { get; protected set; } = 50.0f;
         protected float angle;
         public int VertCount { get; protected set; }
         public Polygon(Color color, bool select, float x, float y, int num_of_vertices) : base(color, select, x, y)
@@ -25,8 +25,7 @@ namespace Lab_6_visual_editor.Figures
             Correct(edge);
             edge = WhatEdge();
             Correct(edge);
-            vertices = new PointF[num_of_vertices];
-            VertCount = num_of_vertices;
+            vertices = new PointF[VertCount];
 
             Recalc(X, Y);
         }
@@ -83,16 +82,17 @@ namespace Lab_6_visual_editor.Figures
     }
     public override char WhatEdge()
         {
-            if (X - Radius < 0)
+            //MathF.Cos(60.0f / 180.0f * MathF.PI
+            if (X - Radius * MathF.Sin(angle / 180.0f * MathF.PI) < 0)
                 return 'l';
 
             if (X + Radius > border_x)
                 return 'r';
 
-             if (Y - Radius < 0)
+             if (Y - Radius * MathF.Sin(angle / 180.0f * MathF.PI) < 0)
                 return 'u';
 
-             if (Y + Radius > border_y)
+             if (Y + Radius * MathF.Sin(angle / 180.0f * MathF.PI) > border_y)
                 return 'b';
 
             return default;
@@ -122,6 +122,29 @@ namespace Lab_6_visual_editor.Figures
         public override void ScaleChange(float scale)
         {
             Radius *= scale;
+            Recalc(X, Y);
+        }
+
+        public override void Save(StreamWriter writer)
+        {
+            writer.WriteLine("Polygon");
+            string s = Fcolor.ToArgb() + " " + X + " " + Y + " " + IsSelected + " " + Radius + " " + VertCount;
+            //reader.Write(Fcolor.Name, " ", X, " ", Y, " ", IsSelected, " ", Big_axis, " ", Small_axis, "\n");
+            writer.WriteLine(s);
+        }
+
+        public override void Load(StreamReader reader, FigureFactory factory)
+        {
+            string[] names = (reader.ReadLine()).Split(" ");
+            Fcolor = Color.FromArgb(Convert.ToInt32(names[0]));
+            X = Convert.ToInt32(names[1]);
+            Y = Convert.ToInt32(names[2]);
+            IsSelected = Convert.ToBoolean(names[3]);
+            Radius = Convert.ToInt32(names[4]);
+            VertCount = Convert.ToInt32(names[5]);
+
+            vertices = new PointF[VertCount];
+            angle = 360.0f / VertCount;
             Recalc(X, Y);
         }
     }
