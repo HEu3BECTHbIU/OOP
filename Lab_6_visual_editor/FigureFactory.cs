@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Lab_6_visual_editor.Figures;
+﻿using Lab_6_visual_editor.Figures;
 
 namespace Lab_6_visual_editor
 {
@@ -13,10 +6,10 @@ namespace Lab_6_visual_editor
     {
         public abstract Figure CreateFigure(string name, Color color, bool select, int x, int y, int big = 40, int small = 25);
         public abstract Element? CreateFigure(string name);
-       // public abstract Figure CreatePolygon(string name, Color color, bool select, int x, int y, int num_of_vertices);
+        // public abstract Figure CreatePolygon(string name, Color color, bool select, int x, int y, int num_of_vertices);
     }
 
-    internal class MyFactory: FigureFactory
+    internal class MyFactory : FigureFactory
     {
         public override Figure CreateFigure(string name, Color color, bool select, int x, int y, int big = 40, int small = 25)
         {

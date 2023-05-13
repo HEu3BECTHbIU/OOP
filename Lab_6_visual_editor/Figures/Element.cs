@@ -10,6 +10,7 @@ namespace Lab_6_visual_editor.Figures
 {
     public abstract class Element: ISavable
     {
+
         protected readonly static int RadiusMargin = 2;
 
         protected readonly static int MoveMargin = 10;
@@ -32,6 +33,7 @@ namespace Lab_6_visual_editor.Figures
         public abstract void Save(StreamWriter reader);
         public abstract void Load(StreamReader reader, FigureFactory factory);
 
+        public abstract string GetName();
         // abstract public char WhatEdge(); // на какой границе 
         // abstract public void Correct(char label); // коррекция положения
     }

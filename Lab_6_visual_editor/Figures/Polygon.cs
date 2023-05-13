@@ -1,32 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms.VisualStyles;
-
-namespace Lab_6_visual_editor.Figures
+﻿namespace Lab_6_visual_editor.Figures
 {
     public class Polygon : Figure
     {
         protected PointF[] vertices;
-        public float Radius { get; protected set; } = 50.0f;
+        public  float Radius { get; protected set; } = 50.0f;
         protected float angle;
         public int VertCount { get; protected set; }
         public Polygon(Color color, bool select, float x, float y, int num_of_vertices) : base(color, select, x, y)
         {
             VertCount = num_of_vertices;
             angle = 360.0f / VertCount;
+            vertices = new PointF[VertCount];
+            Recalc(X, Y);
+
             char edge = WhatEdge();
             Correct(edge);
             edge = WhatEdge();
             Correct(edge);
-            vertices = new PointF[VertCount];
-
             Recalc(X, Y);
         }
         protected void Recalc(float x, float y)
@@ -79,22 +69,20 @@ namespace Lab_6_visual_editor.Figures
 
             else if (edge == 'b')
                 Y = border_y - Radius;
-    }
-    public override char WhatEdge()
+        }
+        public override char WhatEdge()
         {
-            //MathF.Cos(60.0f / 180.0f * MathF.PI
-            if (X - Radius * MathF.Sin(angle / 180.0f * MathF.PI) < 0)
-                return 'l';
-
-            if (X + Radius > border_x)
-                return 'r';
-
-             if (Y - Radius * MathF.Sin(angle / 180.0f * MathF.PI) < 0)
-                return 'u';
-
-             if (Y + Radius * MathF.Sin(angle / 180.0f * MathF.PI) > border_y)
-                return 'b';
-
+            for (int i = 0; i < VertCount; i++)
+            {
+                if (vertices[i].X < 0)
+                    return 'l';
+                if (vertices[i].X > border_x)
+                    return 'r';
+                if (vertices[i].Y < 0)
+                    return 'u';
+                if (vertices[i].Y > border_y)
+                    return 'b';
+            }
             return default;
         }
 
@@ -146,6 +134,14 @@ namespace Lab_6_visual_editor.Figures
             vertices = new PointF[VertCount];
             angle = 360.0f / VertCount;
             Recalc(X, Y);
+        }
+        public override string GetName()
+        {
+            if (VertCount == 3)
+                return "Triangle";
+            else if (VertCount == 4)
+                return "Square";
+            else return "Pentagon";
         }
     }
 }

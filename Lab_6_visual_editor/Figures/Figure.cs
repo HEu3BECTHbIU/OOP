@@ -6,11 +6,8 @@ namespace Lab_6_visual_editor
     public abstract class Figure: Element
     {
         public Color Fcolor { get; protected set; }
-       // public bool IsSelected { get; protected set; }
         public float X { get; protected set; }
         public float Y { get; protected set; }
-       // public static int border_x { get; protected set; }
-       // public static int border_y { get; protected set; }
 
         public Figure(Color color, bool select, float x, float y)
         {
@@ -33,9 +30,6 @@ namespace Lab_6_visual_editor
         {
             Fcolor = color;
         }
-
-        // public abstract void Save();
-        // public abstract void Load();
     }
 }
 

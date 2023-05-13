@@ -66,22 +66,22 @@ namespace Lab_6_visual_editor.Figures
             }
             return false;
         }
-        
+
         // коррекция положения в конструкторе
         public override void Correct(char edge)
         {
-            
+
             if (edge == 'l')
-                 X = Big_axis;
+                X = Big_axis;
 
             else if (edge == 'u')
                 Y = Small_axis;
 
             else if (edge == 'r')
-                 X = border_x - Big_axis;
+                X = border_x - Big_axis;
 
             else if (edge == 'b')
-                  Y = border_y - Small_axis;
+                Y = border_y - Small_axis;
         }
 
         public override void Move(int x, int y)
@@ -114,6 +114,12 @@ namespace Lab_6_visual_editor.Figures
             Big_axis = Convert.ToInt32(names[4]);
             Small_axis = Convert.ToInt32(names[5]);
             //this = await JsonSerializer.DeserializeAsync<Ellipse>(reader);
+        }
+        public override string GetName()
+        {
+            if (Small_axis == Big_axis)
+                return "Circle";
+            else return "Ellipse";
         }
     }
 }

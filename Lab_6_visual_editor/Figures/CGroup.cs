@@ -7,7 +7,7 @@ namespace Lab_6_visual_editor.Figures
 {
     public class CGroup : Element
     {
-        protected ShapeStorage? group;
+        public ShapeStorage? group { get; }
 
         public CGroup(bool selection)
         {
@@ -18,7 +18,7 @@ namespace Lab_6_visual_editor.Figures
         { 
             group.PushBack(element);
         }
-        public void Decompose(Storage<Element> group_members)
+        public void Decompose(ShapeStorage group_members)
         {
             if (group != null)
             {
@@ -147,37 +147,9 @@ namespace Lab_6_visual_editor.Figures
             }
 
         }
-        /*
-public override void Move(char key)
-{
-if (group.Count != 0)
-{
-CIterator<Element> i = group.CreateIterator();
-for (i.First(); !i.IsEol(); i.Next())
-{
-  i.GetCurrent().Move(key);
-  char edge = WhatEdge();
-  if (edge != default)
-  {
-     // i.GetCurrent().Correct(edge);
-      break;
-  }
-}
-}
-}
-*/
-        /*
-        public override void ScaleChange(char key)
+        public override string GetName()
         {
-            if (group.Count != 0)
-            {
-                CIterator<Element> i = group.CreateIterator();
-                for (i.First(); !i.IsEol(); i.Next())
-                {
-                    i.GetCurrent().ScaleChange(key);
-                }
-            }
+            return "Group";
         }
-        */
     }
 }

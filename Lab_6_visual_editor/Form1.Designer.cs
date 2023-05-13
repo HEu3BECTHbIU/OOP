@@ -49,16 +49,22 @@
             toolStripSeparator3 = new ToolStripSeparator();
             сгруппироватьToolStripMenuItem = new ToolStripMenuItem();
             разгруппироватьToolStripMenuItem = new ToolStripMenuItem();
+            panel1 = new Panel();
+            treeView1 = new TreeView();
+            toolStripDropDownButton2 = new ToolStripDropDownButton();
+            toolStripSeparator5 = new ToolStripSeparator();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+            splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // toolStrip1
             // 
             toolStrip1.ImageScalingSize = new Size(20, 20);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripDropDownButton1, toolStripSeparator4, toolStripComboBox1, toolStripSeparator1, toolStripButton1, toolStripSeparator2, toolStripSplitButton1 });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripDropDownButton1, toolStripSeparator4, toolStripComboBox1, toolStripSeparator1, toolStripButton1, toolStripSeparator2, toolStripSplitButton1, toolStripSeparator5, toolStripDropDownButton2 });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.Size = new Size(800, 28);
@@ -79,21 +85,21 @@
             // открытьToolStripMenuItem
             // 
             открытьToolStripMenuItem.Name = "открытьToolStripMenuItem";
-            открытьToolStripMenuItem.Size = new Size(224, 26);
+            открытьToolStripMenuItem.Size = new Size(166, 26);
             открытьToolStripMenuItem.Text = "Открыть";
             открытьToolStripMenuItem.Click += открытьToolStripMenuItem_Click;
             // 
             // сохранитьToolStripMenuItem
             // 
             сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
-            сохранитьToolStripMenuItem.Size = new Size(224, 26);
+            сохранитьToolStripMenuItem.Size = new Size(166, 26);
             сохранитьToolStripMenuItem.Text = "Сохранить";
             сохранитьToolStripMenuItem.Click += сохранитьToolStripMenuItem_Click;
             // 
             // закрытьToolStripMenuItem
             // 
             закрытьToolStripMenuItem.Name = "закрытьToolStripMenuItem";
-            закрытьToolStripMenuItem.Size = new Size(224, 26);
+            закрытьToolStripMenuItem.Size = new Size(166, 26);
             закрытьToolStripMenuItem.Text = "Очистить";
             закрытьToolStripMenuItem.Click += закрытьToolStripMenuItem_Click;
             // 
@@ -109,6 +115,7 @@
             toolStripComboBox1.Name = "toolStripComboBox1";
             toolStripComboBox1.Size = new Size(140, 28);
             toolStripComboBox1.Text = "Выберите фигуру";
+            toolStripComboBox1.Leave += toolStripComboBox1_TextChanged;
             toolStripComboBox1.TextChanged += toolStripComboBox1_TextChanged;
             // 
             // toolStripSeparator1
@@ -166,11 +173,16 @@
             splitContainer1.Panel1.ContextMenuStrip = contextMenuStrip1;
             splitContainer1.Panel1.Paint += splitContainer1_Panel1_Paint;
             splitContainer1.Panel1.MouseClick += splitContainer1_Panel1_MouseClick;
+            splitContainer1.Panel1.MouseDown += splitContainer1_Panel1_MouseDown;
+            splitContainer1.Panel1.MouseMove += splitContainer1_Panel1_MouseMove;
+            splitContainer1.Panel1.MouseUp += splitContainer1_Panel1_MouseUp;
+            splitContainer1.Panel1.PreviewKeyDown += splitContainer1_Panel1_PreviewKeyDown;
             splitContainer1.Panel1.Resize += splitContainer1_Panel1_Resize;
             // 
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.BackColor = SystemColors.ActiveCaption;
+            splitContainer1.Panel2.Controls.Add(panel1);
             splitContainer1.Size = new Size(800, 422);
             splitContainer1.SplitterDistance = 529;
             splitContainer1.SplitterWidth = 1;
@@ -210,6 +222,37 @@
             разгруппироватьToolStripMenuItem.Text = "разгруппировать";
             разгруппироватьToolStripMenuItem.Click += разгруппироватьToolStripMenuItem_Click;
             // 
+            // panel1
+            // 
+            panel1.Controls.Add(treeView1);
+            panel1.Location = new Point(17, 15);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(241, 359);
+            panel1.TabIndex = 1;
+            // 
+            // treeView1
+            // 
+            treeView1.Location = new Point(3, 26);
+            treeView1.Name = "treeView1";
+            treeView1.Size = new Size(222, 263);
+            treeView1.TabIndex = 0;
+            treeView1.BeforeSelect += treeView1_BeforeSelect;
+            treeView1.AfterSelect += treeView1_AfterSelect;
+            // 
+            // toolStripDropDownButton2
+            // 
+            toolStripDropDownButton2.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            toolStripDropDownButton2.Image = (Image)resources.GetObject("toolStripDropDownButton2.Image");
+            toolStripDropDownButton2.ImageTransparentColor = Color.Magenta;
+            toolStripDropDownButton2.Name = "toolStripDropDownButton2";
+            toolStripDropDownButton2.Size = new Size(138, 25);
+            toolStripDropDownButton2.Text = "История команд";
+            // 
+            // toolStripSeparator5
+            // 
+            toolStripSeparator5.Name = "toolStripSeparator5";
+            toolStripSeparator5.Size = new Size(6, 28);
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -221,12 +264,13 @@
             MinimumSize = new Size(700, 400);
             Name = "Form1";
             Text = "Form1";
-            KeyPress += Form1_KeyPress;
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
+            splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             contextMenuStrip1.ResumeLayout(false);
+            panel1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -254,5 +298,9 @@
         private ToolStripMenuItem открытьToolStripMenuItem;
         private ToolStripMenuItem сохранитьToolStripMenuItem;
         private ToolStripMenuItem закрытьToolStripMenuItem;
+        private Panel panel1;
+        private TreeView treeView1;
+        private ToolStripSeparator toolStripSeparator5;
+        private ToolStripDropDownButton toolStripDropDownButton2;
     }
 }
