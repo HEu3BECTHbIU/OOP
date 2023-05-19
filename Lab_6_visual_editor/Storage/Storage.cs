@@ -222,6 +222,17 @@
         public new bool Remove(Element value)
         {
             bool IsRemoved = base.Remove(value);
+            value.observable.Clear();
+            value.observer.Clear();
+            CIterator<Element> i = CreateIterator();
+            for (i.First(); !i.IsEol(); i.Next())
+            {
+                if (i.GetCurrent().observable.IsObserver(value))
+                {
+                    i.GetCurrent().observable.RemoveObserver(value);
+                }
+            }
+            value.observer.Clear();
             if (IsRemoved)
                 Notify();
             return IsRemoved;

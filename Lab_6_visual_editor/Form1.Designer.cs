@@ -43,16 +43,21 @@
             toolStripSplitButton1 = new ToolStripSplitButton();
             IntersectionCheck = new ToolStripMenuItem();
             CtrlCheck = new ToolStripMenuItem();
+            toolStripSeparator5 = new ToolStripSeparator();
+            toolStripDropDownButton2 = new ToolStripDropDownButton();
             splitContainer1 = new SplitContainer();
             contextMenuStrip1 = new ContextMenuStrip(components);
             toolStripMenuItem1 = new ToolStripMenuItem();
             toolStripSeparator3 = new ToolStripSeparator();
             сгруппироватьToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator6 = new ToolStripSeparator();
             разгруппироватьToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator7 = new ToolStripSeparator();
+            удалитьToolStripMenuItem = new ToolStripMenuItem();
+            checkBox1 = new CheckBox();
             panel1 = new Panel();
             treeView1 = new TreeView();
-            toolStripDropDownButton2 = new ToolStripDropDownButton();
-            toolStripSeparator5 = new ToolStripSeparator();
+            свойстваToolStripMenuItem = new ToolStripMenuItem();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel2.SuspendLayout();
@@ -70,7 +75,6 @@
             toolStrip1.Size = new Size(800, 28);
             toolStrip1.TabIndex = 0;
             toolStrip1.Text = "toolStrip1";
-            toolStrip1.ItemClicked += toolStrip1_ItemClicked;
             // 
             // toolStripDropDownButton1
             // 
@@ -162,6 +166,20 @@
             CtrlCheck.Size = new Size(380, 26);
             CtrlCheck.Text = "выбор нескольких элеметов";
             // 
+            // toolStripSeparator5
+            // 
+            toolStripSeparator5.Name = "toolStripSeparator5";
+            toolStripSeparator5.Size = new Size(6, 28);
+            // 
+            // toolStripDropDownButton2
+            // 
+            toolStripDropDownButton2.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            toolStripDropDownButton2.Image = (Image)resources.GetObject("toolStripDropDownButton2.Image");
+            toolStripDropDownButton2.ImageTransparentColor = Color.Magenta;
+            toolStripDropDownButton2.Name = "toolStripDropDownButton2";
+            toolStripDropDownButton2.Size = new Size(138, 25);
+            toolStripDropDownButton2.Text = "История команд";
+            // 
             // splitContainer1
             // 
             splitContainer1.Dock = DockStyle.Fill;
@@ -182,6 +200,7 @@
             // splitContainer1.Panel2
             // 
             splitContainer1.Panel2.BackColor = SystemColors.ActiveCaption;
+            splitContainer1.Panel2.Controls.Add(checkBox1);
             splitContainer1.Panel2.Controls.Add(panel1);
             splitContainer1.Size = new Size(800, 422);
             splitContainer1.SplitterDistance = 529;
@@ -192,66 +211,87 @@
             // contextMenuStrip1
             // 
             contextMenuStrip1.ImageScalingSize = new Size(20, 20);
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripSeparator3, сгруппироватьToolStripMenuItem, разгруппироватьToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripSeparator3, сгруппироватьToolStripMenuItem, toolStripSeparator6, разгруппироватьToolStripMenuItem, toolStripSeparator7, удалитьToolStripMenuItem, свойстваToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(200, 82);
+            contextMenuStrip1.Size = new Size(211, 170);
             // 
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(199, 24);
+            toolStripMenuItem1.Size = new Size(210, 24);
             toolStripMenuItem1.Text = "изменить цвет";
             toolStripMenuItem1.Click += toolStripMenuItem1_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(196, 6);
+            toolStripSeparator3.Size = new Size(207, 6);
             // 
             // сгруппироватьToolStripMenuItem
             // 
             сгруппироватьToolStripMenuItem.Name = "сгруппироватьToolStripMenuItem";
-            сгруппироватьToolStripMenuItem.Size = new Size(199, 24);
+            сгруппироватьToolStripMenuItem.Size = new Size(210, 24);
             сгруппироватьToolStripMenuItem.Text = "сгруппировать";
             сгруппироватьToolStripMenuItem.Click += сгруппироватьToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator6
+            // 
+            toolStripSeparator6.Name = "toolStripSeparator6";
+            toolStripSeparator6.Size = new Size(207, 6);
             // 
             // разгруппироватьToolStripMenuItem
             // 
             разгруппироватьToolStripMenuItem.Name = "разгруппироватьToolStripMenuItem";
-            разгруппироватьToolStripMenuItem.Size = new Size(199, 24);
+            разгруппироватьToolStripMenuItem.Size = new Size(210, 24);
             разгруппироватьToolStripMenuItem.Text = "разгруппировать";
             разгруппироватьToolStripMenuItem.Click += разгруппироватьToolStripMenuItem_Click;
+            // 
+            // toolStripSeparator7
+            // 
+            toolStripSeparator7.Name = "toolStripSeparator7";
+            toolStripSeparator7.Size = new Size(207, 6);
+            // 
+            // удалитьToolStripMenuItem
+            // 
+            удалитьToolStripMenuItem.Name = "удалитьToolStripMenuItem";
+            удалитьToolStripMenuItem.Size = new Size(210, 24);
+            удалитьToolStripMenuItem.Text = "удалить стрелки";
+            удалитьToolStripMenuItem.Click += удалитьToolStripMenuItem_Click;
+            // 
+            // checkBox1
+            // 
+            checkBox1.AutoSize = true;
+            checkBox1.Location = new Point(22, 343);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(206, 24);
+            checkBox1.TabIndex = 2;
+            checkBox1.Text = "Режим рисования линий";
+            checkBox1.UseVisualStyleBackColor = true;
+            checkBox1.CheckedChanged += checkBox1_CheckedChanged;
             // 
             // panel1
             // 
             panel1.Controls.Add(treeView1);
             panel1.Location = new Point(17, 15);
             panel1.Name = "panel1";
-            panel1.Size = new Size(241, 359);
+            panel1.Size = new Size(241, 292);
             panel1.TabIndex = 1;
             // 
             // treeView1
             // 
-            treeView1.Location = new Point(3, 26);
+            treeView1.Location = new Point(3, 3);
             treeView1.Name = "treeView1";
             treeView1.Size = new Size(222, 263);
             treeView1.TabIndex = 0;
             treeView1.BeforeSelect += treeView1_BeforeSelect;
             treeView1.AfterSelect += treeView1_AfterSelect;
             // 
-            // toolStripDropDownButton2
+            // свойстваToolStripMenuItem
             // 
-            toolStripDropDownButton2.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            toolStripDropDownButton2.Image = (Image)resources.GetObject("toolStripDropDownButton2.Image");
-            toolStripDropDownButton2.ImageTransparentColor = Color.Magenta;
-            toolStripDropDownButton2.Name = "toolStripDropDownButton2";
-            toolStripDropDownButton2.Size = new Size(138, 25);
-            toolStripDropDownButton2.Text = "История команд";
-            // 
-            // toolStripSeparator5
-            // 
-            toolStripSeparator5.Name = "toolStripSeparator5";
-            toolStripSeparator5.Size = new Size(6, 28);
+            свойстваToolStripMenuItem.Name = "свойстваToolStripMenuItem";
+            свойстваToolStripMenuItem.Size = new Size(210, 24);
+            свойстваToolStripMenuItem.Text = "Свойства";
+            свойстваToolStripMenuItem.Click += свойстваToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -267,6 +307,7 @@
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
             splitContainer1.Panel2.ResumeLayout(false);
+            splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             contextMenuStrip1.ResumeLayout(false);
@@ -302,5 +343,10 @@
         private TreeView treeView1;
         private ToolStripSeparator toolStripSeparator5;
         private ToolStripDropDownButton toolStripDropDownButton2;
+        private CheckBox checkBox1;
+        private ToolStripSeparator toolStripSeparator6;
+        private ToolStripSeparator toolStripSeparator7;
+        private ToolStripMenuItem удалитьToolStripMenuItem;
+        private ToolStripMenuItem свойстваToolStripMenuItem;
     }
 }

@@ -191,6 +191,7 @@ namespace Lab_6_visual_editor.Commands
             if (elem == null)
                 return;
             added = elem;
+            (added as CGroup).group.Clear();
             CIterator <Element> i = selection.CreateIterator();
             for (i.First(); !i.IsEol(); i.Next())
             {

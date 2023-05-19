@@ -1,5 +1,6 @@
 ﻿using Lab_6_visual_editor.Commands;
 using Lab_6_visual_editor.Interfaces;
+using Lab_6_visual_editor.Observer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,7 +58,10 @@ namespace Lab_6_visual_editor.Figures
             }
             pict.Graphics.FillEllipse(brush, X - Big_axis, Y - Small_axis, Big_axis * 2, Small_axis * 2);
             pict.Graphics.DrawEllipse(pen, X - Big_axis, Y - Small_axis, Big_axis * 2, Small_axis * 2);
-        }
+             //observable.ShowLines(X, Y, pict);
+            observer.Changed(pict);
+            observable.ToDefault();
+            }
         public override bool CheckSelection(int x, int y)
         {
             if ((x - X) * (x - X) + (y - Y) * (y - Y) <= Big_axis * Small_axis)
@@ -88,8 +92,8 @@ namespace Lab_6_visual_editor.Figures
         {
             X += x;
             Y += y;
+            observable.NotifyObservers(x, y);
         }
-
         public override void ScaleChange(float scale)
         {
             Small_axis *= scale;
@@ -120,6 +124,11 @@ namespace Lab_6_visual_editor.Figures
             if (Small_axis == Big_axis)
                 return "Circle";
             else return "Ellipse";
+        }
+
+        public override PointF GetCenter()
+        {
+            return new PointF(X, Y);
         }
     }
 }

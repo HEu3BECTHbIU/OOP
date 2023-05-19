@@ -75,6 +75,9 @@ namespace Lab_6_visual_editor.Figures
                 {
                     i.GetCurrent().Draw(pict);
                 }
+               // observable.ToDefault();
+                observer.Changed(pict);
+                observable.ToDefault();
             }
         }
         public override void ColorChange(Color color)
@@ -95,6 +98,7 @@ namespace Lab_6_visual_editor.Figures
                 {
                     i.GetCurrent().Move(x, y);
                 }
+                observable.NotifyObservers(x, y);
             }
         }
 
@@ -150,6 +154,18 @@ namespace Lab_6_visual_editor.Figures
         public override string GetName()
         {
             return "Group";
+        }
+
+        public override PointF GetCenter()
+        {
+            float x = 0, y = 0;
+            CIterator<Element> i = group.CreateIterator();
+            for (i.First(); !i.IsEol(); i.Next())
+            {
+                x += i.GetCurrent().GetCenter().X;
+                y += i.GetCurrent().GetCenter().Y;
+            }
+            return new PointF(x / Count(), y / Count());
         }
     }
 }

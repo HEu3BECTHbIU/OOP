@@ -41,6 +41,8 @@
             }
             pict.Graphics.FillPolygon(brush, vertices);
             pict.Graphics.DrawPolygon(pen, vertices);
+            observer.Changed(pict);
+            observable.ToDefault();
         }
         public override bool CheckSelection(int x, int y)
         {
@@ -95,6 +97,7 @@
                 vertices[i].X += x;
                 vertices[i].Y += y;
             }
+            observable.NotifyObservers(x, y);
         }
 
         public override bool IsOnEdge()
@@ -142,6 +145,11 @@
             else if (VertCount == 4)
                 return "Square";
             else return "Pentagon";
+        }
+
+        public override PointF GetCenter()
+        {
+            return new PointF(X, Y);
         }
     }
 }

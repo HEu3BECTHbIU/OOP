@@ -1,6 +1,7 @@
 using Lab_6_visual_editor.Commands;
 using Lab_6_visual_editor.Figures;
 using Lab_6_visual_editor.Storage;
+using System.Diagnostics.Metrics;
 using System.Windows.Forms;
 // using System.Xml;
 
@@ -14,12 +15,12 @@ namespace Lab_6_visual_editor
         TreeHandler treeHandler;
         Dictionary<Keys, Command> commands;
         // Dictionary<char, StorageCommand> storageCommands;
-        Stack<Command> history;
+        Stack<List<Command>> history;
 
         public Form1()
         {
             InitializeComponent();
-            history = new Stack<Command>();
+            history = new Stack<List<Command>>();
             figures = new ShapeStorage();
             treeHandler = new TreeHandler(treeView1);
 
@@ -43,12 +44,29 @@ namespace Lab_6_visual_editor
             colordDialog1.Color = Color.Aquamarine;
 
         }
-
-        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void PushCommand(List<Command> com)
         {
-
+            if (com.Count == 0)
+                return;
+            history.Push(com);
+            string history_message = null;
+            if (com[0] is ColorCommand)
+                history_message = "Изменение цвета";
+            else if (com[0] is MoveCommand)
+                history_message = "Перемещение элементов";
+            else if (com[0] is ScaleCommand)
+                history_message = "Изменение масштаба";
+            else if (com[0] is AddCommand)
+                history_message = "Добавление элементов";
+            else if (com[0] is DeleteCommand)
+                history_message = "Удаление элементов";
+            else if (com[0] is GroupCommand)
+                history_message = "Группировка элементов";
+            else if (com[0] is DeGroupCommand)
+                history_message = "Разгруппировка элементов";
+            toolStripDropDownButton2.DropDownItems.Insert(0, new ToolStripLabel(history_message));
         }
-
+        // Выбор цвета
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             colordDialog1.FullOpen = false;
@@ -59,6 +77,7 @@ namespace Lab_6_visual_editor
                 toolStripButton1.BackColor = colordDialog1.Color;
             }
         }
+        // клик мышкой с включенным пересечением
         private void MouseClickWithIntersection(object sender, MouseEventArgs e)
         {
             bool flag = false;
@@ -76,11 +95,10 @@ namespace Lab_6_visual_editor
                 Figure figure = factory.CreateFigure(toolStripComboBox1.Text, colordDialog1.Color, true, e.X, e.Y, 40, 25);
                 Command new_command = new AddCommand(figures, figure);
                 new_command.Execute(figure);
-                history.Push(new_command);
-                toolStripDropDownButton2.DropDownItems.Insert(0, new ToolStripLabel("Создание элемента"));
-                //figures.PushBack(figure);
+                PushCommand(new List<Command> { new_command });
             }
         }
+        // клик мышкой с выключенным пересечением
         private void MouseClickNoIntersection(object sender, MouseEventArgs e)
         {
             bool flag = false;
@@ -90,7 +108,6 @@ namespace Lab_6_visual_editor
                 if (i.GetCurrent().CheckSelection(e.X, e.Y))
                 {
                     figures.SelectElement(i.GetCurrent());
-                    // i.GetCurrent().Select();
                     flag = true;
                     break;
                 }
@@ -100,26 +117,33 @@ namespace Lab_6_visual_editor
                 Element figure = factory.CreateFigure(toolStripComboBox1.Text, colordDialog1.Color, true, e.X, e.Y);
                 Command new_command = new AddCommand(figures, figure);
                 new_command.Execute(figure);
-                history.Push(new_command);
-                // figures.PushBack(figure);
+                PushCommand(new List<Command> { new_command });
             }
         }
 
         private void splitContainer1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            
+
         }
+        // отмена последнего действия
         private void Unexecute()
         {
             if (history.Count > 0)
             {
-                Command last_command = history.Pop();
-                last_command.Unexecute();
+                List<Command> last_command = history.Pop();
+                for (int i = 0; i < last_command.Count; i++)
+                {
+                    last_command[i].Unexecute();
+                }
+                // last_command.Unexecute();
+                toolStripDropDownButton2.DropDownItems.RemoveAt(0);
             }
             splitContainer1.Panel1.Refresh();
         }
+        // удаление
         private void Delete()
         {
+            List<Command> com = new List<Command>();
             CIterator<Element> i = figures.CreateIterator();
             for (i.First(); !i.IsEol(); i.Next())
             {
@@ -127,9 +151,11 @@ namespace Lab_6_visual_editor
                 {
                     Command new_command = new DeleteCommand(figures, i.GetCurrent());
                     new_command.Execute(i.GetCurrent());
-                    history.Push(new_command);
+                    com.Add(new_command);
+                    // PushCommand(new_command);
                 }
             }
+            PushCommand(com);
             if (figures.Count != 0)
             {
                 figures.SelectElement(figures.Tail.Value);
@@ -181,6 +207,7 @@ namespace Lab_6_visual_editor
             {
                 return;
             }
+            List<Command> com = new List<Command>();
             CIterator<Element> i = figures.CreateIterator();
             for (i.First(); !i.IsEol(); i.Next())
             {
@@ -188,9 +215,11 @@ namespace Lab_6_visual_editor
                 {
                     Command new_command = new ColorCommand(colordDialog1.Color, oldColor);
                     new_command.Execute(i.GetCurrent());
-                    history.Push(new_command);
+                    com.Add(new_command);
+                    // PushCommand(new_command);
                 }
             }
+            PushCommand(com);
             colordDialog1.Color = oldColor;
             splitContainer1.Panel1.Refresh();
         }
@@ -199,45 +228,21 @@ namespace Lab_6_visual_editor
         {
             CGroup new_group = new CGroup(true);
             Command group = new GroupCommand(figures);
+            List<Command> com = new List<Command>();
             group.Execute(new_group);
+            com.Add(group);
             if (new_group.Count() > 0)
             {
-                history.Push(group);
+                PushCommand(com);
+                // PushCommand(group);
             }
-            /* CIterator<Element> i = figures.CreateIterator();
-             CGroup new_group = new CGroup(true);
-             for (i.First(); !i.IsEol(); i.Next())
-             {
-                 if (i.GetCurrent().IsSelected)
-                 {
-                     new_group.AddFigure(i.GetCurrent());
-                 }
-             }
-
-             i = figures.CreateIterator();
-             for (i.First(); !i.IsEol(); i.Next())
-             {
-                 if (i.GetCurrent().IsSelected)
-                 {
-                     //storageCommands['D'] = new DeleteCommand(figures, figures.Head, i.GetCurrent());
-                     //storageCommands['D'].Execute(i.GetCurrent());
-                     figures.Remove(i.GetCurrent());
-                 }
-             }
-            
-            if (new_group.Count() > 0)
-            {
-                figures.PushBack(new_group);
-            }
-            */
             splitContainer1.Panel1.Refresh();
         }
 
         private void разгруппироватьToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            List<Command> com = new List<Command>();
             Command group = new DeGroupCommand(figures);
-
-            //ShapeStorage group_elements = new ShapeStorage();
 
             CIterator<Element> i = figures.CreateIterator();
             for (i.First(); !i.IsEol(); i.Next())
@@ -245,29 +250,13 @@ namespace Lab_6_visual_editor
                 if (i.GetCurrent().IsSelected && i.GetCurrent() is CGroup)
                 {
                     group.Execute(i.GetCurrent());
-                    history.Push(group);
-                    //(i.GetCurrent() as CGroup).Decompose(group_elements);
-                    //figures.Remove(i.GetCurrent());
+                    com.Add(group);
+                    // PushCommand(group);
                 }
             }
-
-            //i = figures.CreateIterator();
-            //for (i.First(); !i.IsEol(); i.Next())
-            //{
-            //    if (i.GetCurrent().IsSelected)
-            //    {
-            //        figures.Remove(i.GetCurrent());
-            //    }
-            // }
-
-            // i = group_elements.CreateIterator();
-            //for (i.First(); !i.IsEol(); i.Next())
-            //{
-            //    figures.PushBack(i.GetCurrent());
-            //}
+            PushCommand(com);
             splitContainer1.Panel1.Refresh();
         }
-
         private async void сохранитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveFileDialog sfd = new SaveFileDialog();
@@ -287,7 +276,6 @@ namespace Lab_6_visual_editor
                 }
             }
         }
-
         private void открытьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -315,13 +303,26 @@ namespace Lab_6_visual_editor
         bool draging = false;
         bool was_dragged = false;
         int curPosX, curPosY, start_x, start_y;
+        Element current = null;
         private void splitContainer1_Panel1_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
                 return;
             }
-
+            if (IsLineRegime)
+            {
+                CIterator<Element> j = figures.CreateIterator();
+                for (j.First(); !j.IsEol(); j.Next())
+                {
+                    if (j.GetCurrent().CheckSelection(e.X, e.Y))
+                    {
+                        current = j.GetCurrent();
+                        return;
+                    }
+                }
+                return;
+            }
             CIterator<Element> i = figures.CreateIterator();
             for (i.First(); !i.IsEol(); i.Next())
             {
@@ -367,6 +368,25 @@ namespace Lab_6_visual_editor
             {
                 return;
             }
+            if (IsLineRegime)
+            {
+                CIterator<Element> j = figures.CreateIterator();
+                for (j.First(); !j.IsEol(); j.Next())
+                {
+                    if (j.GetCurrent().CheckSelection(e.X, e.Y))
+                    {
+                        if (!current.observable.IsObserver(j.GetCurrent()) && current != j.GetCurrent())
+                        {
+                            current.observable.AddObserver(j.GetCurrent());
+                            j.GetCurrent().observer.AddPerent(current);
+                            splitContainer1.Panel1.Refresh();
+
+                        }
+                        break;
+                    }
+                }
+                //return;
+            }
             draging = false;
             CIterator<Element> i = figures.CreateIterator();
 
@@ -389,16 +409,19 @@ namespace Lab_6_visual_editor
             }
             else
             {
+                List<Command> com = new List<Command>();
                 i = figures.CreateIterator();
                 for (i.First(); !i.IsEol(); i.Next())
                 {
                     if (i.GetCurrent().IsSelected)
                     {
                         Command new_com = new MoveCommand(curPosX - start_x, curPosY - start_y, i.GetCurrent());
-                        history.Push(new_com);
+                        com.Add(new_com);
+                        // PushCommand(new_com);
+                        // history.Push(new_com);
                     }
-
                 }
+                PushCommand(com);
             }
             was_dragged = false;
             splitContainer1.Panel1.Refresh();
@@ -420,6 +443,7 @@ namespace Lab_6_visual_editor
                 }
                 tmp.BackColor = Color.Gray;
                 treeHandler.Notify();
+                //treeHandler.treeView.ExpandAll();
             }
             splitContainer1.Panel1.Refresh();
         }
@@ -434,6 +458,8 @@ namespace Lab_6_visual_editor
             }
             if (current != null)
             {
+                List<Command> commands = new List<Command>();
+                //bool is_on_edge = false;
                 CIterator<Element> i = figures.CreateIterator();
                 for (i.First(); !i.IsEol(); i.Next())
                 {
@@ -441,16 +467,20 @@ namespace Lab_6_visual_editor
                     {
                         Command new_command = current.Copy();
                         new_command.Execute(i.GetCurrent());
+                        // PushCommand(new_command);
                         if (i.GetCurrent().IsOnEdge())
                         {
+                            //is_on_edge = true;
                             new_command.Unexecute();
+                            // Unexecute();
                         }
                         else
                         {
-                            history.Push(new_command);
+                            commands.Add(new_command);
                         }
                     }
                 }
+                PushCommand(commands);
             }
             splitContainer1.Panel1.Refresh();
         }
@@ -462,6 +492,39 @@ namespace Lab_6_visual_editor
                 e.Cancel = true;
             }
             splitContainer1.Panel1.Select();
+        }
+
+        private bool IsLineRegime = false;
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            IsLineRegime = !IsLineRegime;
+            splitContainer1.Panel1.Select();
+        }
+
+        private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CIterator<Element> j = figures.CreateIterator();
+            for (j.First(); !j.IsEol(); j.Next())
+            {
+                if (j.GetCurrent().IsSelected)
+                {
+                    j.GetCurrent().observable.Clear();
+                    CIterator<Element> i = figures.CreateIterator();
+                    for (i.First(); !i.IsEol(); i.Next())
+                    {
+                        i.GetCurrent().observable.RemoveObserver(j.GetCurrent());
+                    }
+                    // i.GetCurrent().observable.RemoveObserver(j.GetCurrent());
+                }
+            }
+            splitContainer1.Panel1.Refresh();
+        }
+
+        private void свойстваToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form form = new Form();
+            //form.Controls.Add(treeView1);
+           // form.Show();
         }
     }
 }
